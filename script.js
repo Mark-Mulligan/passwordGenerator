@@ -37,7 +37,7 @@ function passwordLengthPrompt() {
     if (passwordLength >= 8 && passwordLength <= 128) {
       break;
     } else {
-      alert('Invalid response, please try again');
+      alert('Invalid response.  Enter a number between 8 and 128.');
     }
   }
 }
@@ -47,12 +47,12 @@ function writePassword() {
 
   passwordLengthPrompt();
 
-  while (!correctStructure) {
+  while (true) {
     passwordCriteriaPrompts();
     if (programQuit) {
       break;
     } else if (passwordCriteria.includes('y')) {
-      correctStructure = true;
+      break;
     } else {
       passwordCriteria = [];
       alert(` Invalid password criteria
@@ -61,9 +61,14 @@ function writePassword() {
     }
   }
 
-  console.log(passwordLength);
-  console.log(passwordCriteria);
-  getSpecialCharacter();
+  //console.log(passwordLength);
+  //console.log(passwordCriteria);
+  //getSpecialCharacter();
+  //console.log(generateNumber(10));
+  for (let i = 0; i < 20; i++) {
+    console.log(getUppercaseLetter());
+  }
+  
 
   //var password = generatePassword();
   //var passwordText = document.querySelector("#password");
@@ -78,7 +83,7 @@ generateBtn.addEventListener("click", writePassword);
 
 How many characters (between 8 and 128);
 What charcters included in password (uppercase, lowercase, numeric, special characters);
-
+65-90 (diiference 25)
 */
 
 console.log(generateNumber(10));
@@ -87,8 +92,9 @@ function getLowercaseLetter () {
 
 }
 
-function getUppercaseLEtter () {
-
+function getUppercaseLetter () {
+  let randomNum = generateNumber(26) + 65;
+  return String.fromCharCode(randomNum);
 }
 
 function getSpecialCharacter () {
