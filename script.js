@@ -5,22 +5,86 @@ var generateBtn = document.querySelector("#generate");
 let specialCharacters = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
 let passwordCriteria = [];
 let passwordLength = 0;
-let correctStructure = false;
 let programQuit = false;
-let prompts = ['special characters', 'numeric characters', 'lowercase letters', 'uppercase letters'];
+let password = [];
+let prompts = ['uppercase letters', 'lowercase letters', 'numeric characters', 'special characters'];
+
+
+let passwordCriteriaAlert = `Invalid password criteria
+Password must include at least one of the following criteria
+lowercase letters, uppercase letters, numeric characters, or special characters`;
+
+
+// Write password to the #password input
+function writePassword() {
+
+  passwordLengthPrompt();
+
+  while (true) {
+    passwordCriteriaPrompts();
+    if (programQuit) break;
+    else if (passwordCriteria.length > 0) break;
+    else {
+      passwordCriteria = [];
+      alert(passwordCriteriaAlert);
+    }
+  }
+
+  console.log(passwordCriteria);
+  password = generatePassword();
+  let passwordText = document.querySelector("#password");
+  passwordText.value = password;
+}
+
+// Add event listener to generate button
+generateBtn.addEventListener("click", writePassword);
+
+/* QUESTIONS ASKED FOR USER
+
+How many characters (between 8 and 128);
+What charcters included in password (uppercase, lowercase, numeric, special characters);
+65-90 (diiference 25)
+*/
+
+function generatePassword() {
+  let index = 0;
+  let choice = 0;
+  let passwordAsArray = [];
+
+  console.log(passwordCriteria);
+
+  //This function garentees that there is a least 1 value of each requested character
+  for (let i = 0; i < passwordCriteria.length; i++) {
+    choice = passwordCriteria[i];
+    passwordAsArray.push(addCharToPassword(choice));
+  }
+
+  //
+  for (let i = passwordCriteria.length; i < passwordLength; i++) {
+    index = generateNumber(passwordCriteria.length);
+    choice = passwordCriteria[index];
+    passwordAsArray.push(addCharToPassword(choice));
+  }
+
+  console.log(passwordAsArray);
+  return passwordAsArray.join('');
+}
 
 function passwordCriteriaPrompts() {
-  let questionsLeft = 4;
+  let questionNum = 0;
 
-  while (questionsLeft > 0) {
+  while (questionNum < 4) {
     while (true) {
-      let response = prompt(`Include ${prompts[questionsLeft - 1]} in password? (y for yes, n for no, q to quit)`);
-      if (response === 'y' || response === 'n') {
-        passwordCriteria.push(response);
-        questionsLeft--;
+      let response = prompt(`Include ${prompts[questionNum]} in password? (y for yes, n for no, q to quit)`);
+      if (response === 'y') {
+        passwordCriteria.push(questionNum);
+        questionNum++;
+        break;
+      } else if (response === 'n') {
+        questionNum++;
         break;
       } else if (response === 'q') {
-        questionsLeft = 0;
+        questionNum = 4;
         programQuit = true;
         location.reload();
         break;
@@ -34,73 +98,31 @@ function passwordCriteriaPrompts() {
 function passwordLengthPrompt() {
   while (true) {
     passwordLength = prompt('Enter the length of the password (Must be a number between 8 and 128)');
-    if (passwordLength >= 8 && passwordLength <= 128) {
-      break;
-    } else {
-      alert('Invalid response.  Enter a number between 8 and 128.');
-    }
+    if (passwordLength >= 8 && passwordLength <= 128) break;
+    else  alert('Invalid response.  Enter a number between 8 and 128.');
   }
 }
 
-// Write password to the #password input
-function writePassword() {
-
-  passwordLengthPrompt();
-
-  while (true) {
-    passwordCriteriaPrompts();
-    if (programQuit) {
-      break;
-    } else if (passwordCriteria.includes('y')) {
-      break;
-    } else {
-      passwordCriteria = [];
-      alert(` Invalid password criteria
-      Password must include at least one of the following criteria
-      lowercase letters, uppercase letters, numeric characters, or special characters`);
-    }
-  }
-
-  //console.log(passwordLength);
-  //console.log(passwordCriteria);
-  //getSpecialCharacter();
-  //console.log(generateNumber(10));
-  for (let i = 0; i < 20; i++) {
-    console.log(getUppercaseLetter());
-  }
-  
-
-  //var password = generatePassword();
-  //var passwordText = document.querySelector("#password");
-
-  //passwordText.value = password;
+function addCharToPassword(number) {
+  if (number === 0) return getUppercaseLetter();
+  else if (number === 1) return getLowercaseLetter();
+  else if (number === 2) return generateNumber(10);
+  else if (number === 3) return getSpecialCharacter();
 }
 
-// Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
 
-/* QUESTIONS ASKED FOR USER
-
-How many characters (between 8 and 128);
-What charcters included in password (uppercase, lowercase, numeric, special characters);
-65-90 (diiference 25)
-*/
-
-console.log(generateNumber(10));
-
-function getLowercaseLetter () {
-
+function getLowercaseLetter() {
+  return getUppercaseLetter().toLowerCase();
 }
 
-function getUppercaseLetter () {
+function getUppercaseLetter() {
   let randomNum = generateNumber(26) + 65;
   return String.fromCharCode(randomNum);
 }
 
-function getSpecialCharacter () {
+function getSpecialCharacter() {
   let randomNum = generateNumber(specialCharacters.length);
-  let result = specialCharacters[randomNum];
-  console.log(result);
+  return specialCharacters[randomNum];
 }
 
 function generateNumber(max) {
