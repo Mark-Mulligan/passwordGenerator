@@ -22,7 +22,7 @@ function writePassword() {
   askForPasswordLength();
   askForPasswordCriteria();
   password = generatePassword();
-  passwordText.value += password;
+  passwordText.value = password;
 }
 
 /* ----- FUNCTIONS LISTED IN ORDER THEY ARE CALLED BY WRITEPASSWORD ----- */
@@ -76,7 +76,6 @@ function passwordCriteriaPrompts() {
 
 function generatePassword() {
   let index = 0;
-  let choice = 0;
   let passwordAsArray = [];
 
   //Generates at least one of each character based on user criteria
