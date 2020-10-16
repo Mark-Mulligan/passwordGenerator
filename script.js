@@ -3,7 +3,7 @@ let specialCharacters = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
 let passwordCriteria = [];
 let passwordLength = 0;
 let programQuit = false;
-let password = [];
+let password = '';
 let prompts = ['uppercase letters', 'lowercase letters', 'numeric characters', 'special characters'];
 let passwordCriteriaAlert = `Invalid password criteria
 Password must include at least one of the following criteria
@@ -29,7 +29,7 @@ function writePassword() {
 function resetData() {
   passwordCriteria = [];
   passwordLength = 0;
-  password = [];
+  password = '';
 }
 
 function askForPasswordLength() {
